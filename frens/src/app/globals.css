@@ -1,0 +1,18 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+}
+
+/* Match the wallet button to the Frens look */
+.wallet-adapter-button-trigger {
+  background-color: #9945ff;
+  border-radius: 9999px;
+  height: 40px;
+  font-size: 14px;
+}
