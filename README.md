@@ -1,11 +1,23 @@
-@ -1,22 +1,8 @@
 # solfrends
 
-Send SOL to your friends by name, not by long wallet addresses.
-Send SOL to friends by name. Connect your wallet, save frens, tap Send. Runs on devnet.
+Send SOL to people by name, not by long wallet addresses. Connect your wallet, save your people, tap Send.
 
-## What it does
-- **Connect wallet** (top right): Phantom, Solflare, Backpack and other Solana wallets.
-- **My wallet** (left): your address and SOL balance. Hit **Send**, pick a friend, type an amount, confirm.
-- **Frens** (right): your saved friends. **+ Add wallet** → give it a name and paste their deposit address → Save.
-- Every send gives you a link to the transaction on Solana Explorer.
+## Who it's for
+- **Universities:** pay back students and clubs for event costs, or send stipends.
+- **Companies:** reimburse employees for travel and expenses in seconds, not weeks.
+- **Friends:** split bills and pay each other back.
+
+Save someone once with a name, then pay them in one tap. Fees are under a cent and money arrives in about a second.
+
+## How it works
+- **Connect wallet** (top right): Phantom, Solflare, Backpack.
+- **My wallet** (left): your balance. Hit **Send**, pick a person, enter an amount, confirm.
+- **Frens** (right): **+ Add wallet**, then give it a name and paste their address.
+
+Runs on devnet (test money). Free test SOL: https://faucet.solana.com
+
+## Run it
+```bash
+cd sol && pnpm install && pnpm dev
+```
+Open http://localhost:3000
