@@ -1,0 +1,32 @@
+# --- Anchor / Solana ---
+.anchor/
+target/
+test-ledger/
+.surfpool/
+**/*-keypair.json
+**/id.json
+*.so
+
+# --- Node ---
+node_modules/
+dist/
+.yarn/
+.pnpm-store/
+*.tsbuildinfo
+
+# --- Secrets ---
+.env
+.env.*
+!.env.example
+*.pem
+
+# --- Claude Code (personal, never commit) ---
+.claude/settings.local.json
+CLAUDE.local.md
+.claude/agent-memory-local/
+
+# --- OS / editor ---
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json
