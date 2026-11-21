@@ -1,5 +1,6 @@
 "use client";
 import dynamic from "next/dynamic";
+import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 import { MOCK, PRIVY_APP_ID } from "@/client/config";
 import { MockSessionProvider } from "@/client/session";
@@ -8,6 +9,9 @@ import { MockSessionProvider } from "@/client/session";
 const PrivySessionProvider = dynamic(() => import("@/client/privy"), { loading: () => null });
 
 export function Providers({ children }: { children: ReactNode }) {
+  // The home page is the solfrends wallet dashboard: plain Connect Wallet, no Privy login.
+  const path = usePathname() ?? "/";
+  if (path === "/") return <>{children}</>;
   if (MOCK) return <MockSessionProvider>{children}</MockSessionProvider>;
   if (!PRIVY_APP_ID) {
     return (
