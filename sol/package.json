@@ -1,0 +1,15 @@
+{
+  "name": "sol",
+  "private": true,
+  "description": "Sol: burner cards for every store, spending straight from your Solana wallet (devnet + sandbox).",
+  "packageManager": "pnpm@10.24.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "typecheck": "pnpm -r --if-present typecheck",
+    "test": "pnpm -r --if-present test",
+    "dev": "pnpm --filter @solsend/web dev",
+    "build": "pnpm --filter @solsend/web build"
+  }
+}

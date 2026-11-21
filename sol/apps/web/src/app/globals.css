@@ -1,0 +1,278 @@
+@import "tailwindcss";
+/* Landscape phones and other short screens (the Home hero must fit with no scrolling). */
+@custom-variant short (@media (max-height: 480px));
+@custom-variant tall (@media (min-height: 860px));
+
+/* ── SolFrends design tokens (UI v2) ──────────────────────────────────────────────────────────
+   Neutral ink + paper, one brand accent (mint) used only for brand moments, violet = onchain proof,
+   amber = sandbox/test. Every color is a CSS variable so light/dark switch in one place. */
+:root {
+  color-scheme: light dark;
+  --paper: #f6f6f3;
+  --surface: #ffffff;
+  --sunken: #eeeeea;
+  --ink: #0b0c0e;
+  --ink-2: #3d3f45;
+  --ink-3: #64676f;
+  --line: #e3e3de;
+  --mint: #19e6a0;
+  --mint-ink: #04664a;
+  --onchain: #7c5cff;
+  --onchain-ink: #5b3fd9;
+  --onchain-bg: #efebff;
+  --sandbox: #fff3d1;
+  --sandbox-ink: #6a4500;
+  --sandbox-line: #f2dfa6;
+  --ok: #0b8a60;
+  --ok-bg: #e7f8f1;
+  --no: #c8323a;
+  --no-bg: #fdecec;
+  --warn: #9a5c00;
+  --warn-bg: #fff4e0;
+  --mock: #a21caf;
+  --mock-line: #e9b8f5;
+  --scrim: rgb(11 12 14 / 0.42);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #0a0a0b;
+    --surface: #141416;
+    --sunken: #1c1c1f;
+    --ink: #f4f4f2;
+    --ink-2: #b9bac0;
+    --ink-3: #8c8e96;
+    --line: #26262a;
+    --mint-ink: #3ef0b4;
+    --onchain-ink: #a794ff;
+    --onchain-bg: #1d1833;
+    --sandbox: #2a2108;
+    --sandbox-ink: #ffd27a;
+    --sandbox-line: #3d300e;
+    --ok: #34d399;
+    --ok-bg: #0f2a20;
+    --no: #ff6b6f;
+    --no-bg: #2c1416;
+    --warn: #ffb547;
+    --warn-bg: #2b2010;
+    --mock: #f0abfc;
+    --mock-line: #6b2a73;
+    --scrim: rgb(0 0 0 / 0.6);
+  }
+}
+
+@theme inline {
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+  --color-paper: var(--paper);
+  --color-surface: var(--surface);
+  --color-sunken: var(--sunken);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-line: var(--line);
+  --color-mint: var(--mint);
+  --color-mint-ink: var(--mint-ink);
+  --color-onchain: var(--onchain);
+  --color-onchain-ink: var(--onchain-ink);
+  --color-onchain-bg: var(--onchain-bg);
+  --color-sandbox: var(--sandbox);
+  --color-sandbox-ink: var(--sandbox-ink);
+  --color-sandbox-line: var(--sandbox-line);
+  --color-ok: var(--ok);
+  --color-ok-bg: var(--ok-bg);
+  --color-no: var(--no);
+  --color-no-bg: var(--no-bg);
+  --color-warn: var(--warn);
+  --color-warn-bg: var(--warn-bg);
+  --color-mock: var(--mock);
+  --color-mock-line: var(--mock-line);
+  --radius-card: 20px;
+  --radius-sheet: 28px;
+  --radius-ctl: 14px;
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-feature-settings: "ss01", "cv11";
+  min-height: 100dvh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+/* lg+: room under every page for the sandbox pill pinned bottom-left (see layout.tsx). */
+@media (min-width: 1024px) { body { padding-bottom: 52px; } }
+/* A13: visible on any background, including dark buttons */
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; box-shadow: 0 0 0 5px color-mix(in srgb, var(--mint) 45%, transparent); border-radius: 10px; }
+::selection { background: color-mix(in srgb, var(--mint) 45%, transparent); color: var(--ink); }
+
+.tnum { font-variant-numeric: tabular-nums; }
+
+/* ── Components as utilities ─────────────────────────────────────────────────────────────── */
+@utility btn { @apply inline-flex min-h-12 select-none items-center justify-center gap-2 rounded-[14px] px-5 text-[15px] font-semibold transition-[transform,background-color,opacity] duration-150 active:scale-[.98] disabled:cursor-not-allowed disabled:opacity-55 disabled:active:scale-100; }
+/* A1: ink primary (19:1) instead of white-on-emerald (3.77:1) */
+@utility btn-primary { @apply btn bg-ink text-paper shadow-[0_1px_2px_rgb(0_0_0/.12)] hover:opacity-90; }
+@utility btn-secondary { @apply btn bg-surface text-ink ring-1 ring-line ring-inset hover:bg-sunken; }
+@utility btn-danger { @apply btn bg-no-bg text-no hover:brightness-95; }
+@utility btn-ghost { @apply btn text-ink-2 hover:bg-sunken; }
+@utility surface { @apply rounded-[20px] bg-surface p-4 shadow-[0_1px_2px_rgb(11_12_14/.05),0_8px_24px_-14px_rgb(11_12_14/.14)] dark:shadow-none dark:ring-1 dark:ring-line; }
+@utility label { @apply mb-1.5 block text-[13px] font-medium text-ink-2; }
+@utility input { @apply w-full min-h-12 rounded-[14px] bg-surface px-3.5 py-2 text-base text-ink ring-1 ring-line ring-inset placeholder:text-ink-3 focus:ring-2 focus:ring-ink; }
+@utility chip { @apply inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-semibold leading-5; }
+@utility sandbox-chip { @apply chip bg-sandbox text-sandbox-ink ring-1 ring-sandbox-line; }
+@utility link { @apply font-medium text-ink underline decoration-ink/30 underline-offset-[3px] hover:decoration-ink; }
+@utility micro { @apply text-[11px] font-semibold uppercase leading-[14px] tracking-[0.08em]; }
+/* Preset / product chips: A5 tap targets ≥ 40px */
+@utility pick { @apply inline-flex min-h-10 items-center justify-center gap-1.5 rounded-full bg-surface px-4 text-sm font-semibold text-ink ring-1 ring-line ring-inset transition hover:bg-sunken aria-pressed:bg-ink aria-pressed:text-paper aria-pressed:ring-ink; }
+
+/* ── Motion ─────────────────────────────────────────────────────────────────────────────── */
+@keyframes row-in { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+@keyframes pop { 0% { transform: scale(.6); opacity: 0; } 70% { transform: scale(1.06); opacity: 1; } 100% { transform: scale(1); } }
+@keyframes shake { 0%, 100% { transform: translateX(0); } 25%, 75% { transform: translateX(-6px); } 50% { transform: translateX(6px); } }
+@keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes shimmer { 100% { transform: translateX(100%); } }
+@keyframes ping-dot { 0% { transform: scale(1); opacity: .7; } 100% { transform: scale(2.4); opacity: 0; } }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+@keyframes glow { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--mint) 55%, transparent); } 100% { box-shadow: 0 0 0 22px color-mix(in srgb, var(--mint) 0%, transparent); } }
+@keyframes breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.015); } }
+@keyframes coin { 0% { left: 0%; opacity: 0; } 12% { opacity: 1; } 88% { opacity: 1; } 100% { left: 100%; opacity: 0; } }
+@keyframes coin-stop { 0% { left: 0%; opacity: 0; } 15% { opacity: 1; } 100% { left: 72%; opacity: 1; } }
+@keyframes sheet-up { from { transform: translateY(100%); } to { transform: none; } }
+@keyframes panel-in { from { transform: translateX(100%); } to { transform: none; } }
+@keyframes born { 0% { transform: perspective(900px) rotateX(14deg) translateY(14px) scale(.97); opacity: .6; } 100% { transform: none; opacity: 1; } }
+@keyframes sheen { from { background-position: -120% 0; } to { background-position: 220% 0; } }
+@keyframes stamp { 0% { transform: rotate(-8deg) scale(1.4); opacity: 0; } 100% { transform: rotate(-8deg) scale(1); opacity: 1; } }
+
+.anim-row-in { animation: row-in .5s var(--ease-out) both; }
+.anim-pop { animation: pop .42s var(--ease-spring) both; }
+.anim-shake { animation: shake .26s ease-in-out 2 both; }
+.anim-rise { animation: rise .36s var(--ease-out) both; }
+.anim-fade { animation: fade .22s var(--ease-out) both; }
+.anim-draw { stroke-dasharray: 40; stroke-dashoffset: 40; animation: draw .32s .12s var(--ease-out) forwards; }
+.anim-glow { animation: glow .9s var(--ease-out) .1s 1 both; }
+.anim-breathe { animation: breathe 1.6s ease-in-out infinite; }
+.anim-born { animation: born .48s var(--ease-spring) both; }
+.anim-stamp { animation: stamp .3s var(--ease-out) both; }
+.stagger > * { animation: rise .36s var(--ease-out) both; }
+.stagger > *:nth-child(2) { animation-delay: 60ms; }
+.stagger > *:nth-child(3) { animation-delay: 120ms; }
+.stagger > *:nth-child(4) { animation-delay: 180ms; }
+.stagger > *:nth-child(5) { animation-delay: 240ms; }
+.stagger > *:nth-child(6) { animation-delay: 300ms; }
+.skeleton { position: relative; overflow: hidden; border-radius: 16px; background: var(--sunken); }
+.skeleton::after { content: ""; position: absolute; inset: 0; transform: translateX(-100%); background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--surface) 60%, transparent), transparent); animation: shimmer 1.3s infinite; }
+.dot-ping { animation: ping-dot 1.4s ease-out infinite; }
+
+/* ── Native <dialog> sheets (A7: focus trap + Escape for free) ───────────────────────────── */
+dialog.sheet { margin: 0; padding: 0; border: 0; max-width: none; max-height: none; background: transparent; color: var(--ink); }
+dialog.sheet::backdrop { background: var(--scrim); animation: fade .2s var(--ease-out) both; }
+dialog.sheet[open] { position: fixed; inset: auto 0 0 0; width: 100%; overflow: visible; } /* the body scrolls; the dialog must not clip its shadow */
+dialog.sheet[open] > .sheet-body { animation: sheet-up .32s var(--ease-out) both; }
+@media (min-width: 1024px) {
+  dialog.sheet.sheet-side[open] { inset: 0 0 0 auto; width: 440px; height: 100dvh; }
+  dialog.sheet.sheet-side[open] > .sheet-body { animation-name: panel-in; height: 100%; max-height: none; border-radius: 28px 0 0 28px; overflow-y: auto; }
+  dialog.sheet.sheet-center[open] { inset: 0; margin: auto; width: 440px; height: fit-content; }
+  dialog.sheet.sheet-center[open] > .sheet-body { border-radius: 28px; animation-name: rise; }
+}
+
+/* ── Card art helpers ────────────────────────────────────────────────────────────────────── */
+.card-noise::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .07; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+.card-sheen::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none; border-radius: inherit;
+  background: linear-gradient(115deg, rgb(255 255 255 / .15) 0%, rgb(255 255 255 / 0) 34%), linear-gradient(0deg, rgb(255 255 255 / 0), rgb(255 255 255 / 0));
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / .22);
+}
+/* Text on card art: a soft shadow keeps white type legible on bright art and projectors (decorative cards only). */
+.card-ink { text-shadow: 0 1px 2px rgb(0 0 0 / .22), 0 0 10px rgb(0 0 0 / .1); }
+.card-sweep { background-image: linear-gradient(105deg, transparent 30%, rgb(255 255 255 / .35) 50%, transparent 70%); background-size: 60% 100%; background-repeat: no-repeat; animation: sheen .8s .2s var(--ease-out) both; }
+
+/* A12: reduced motion — no travel, no loops; crossfades only */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; animation-delay: 0ms !important; transition-duration: .001ms !important; scroll-behavior: auto !important; }
+  .rm-hide { display: none !important; }
+}
+
+/* Home hero, "Midnight Mint": near-black → deep Solana purple → near-black, with a faint mint glow at the bottom.
+   Layout adapted from the MIT "Onward Summit Template" by Kedhareswer Naidu (notice: THIRD_PARTY_NOTICES.md). Keeps its
+   own colours in dark mode too. */
+.landing-bg {
+  background:
+    linear-gradient(180deg, transparent 82%, #0b0618 100%),
+    radial-gradient(ellipse 34% 30% at 50% 47%, color-mix(in srgb, #4c1d95 55%, #7c3aed) 0%, transparent 100%),
+    radial-gradient(ellipse 70% 26% at 50% 92%, rgba(20, 241, 149, .13) 0%, transparent 100%),
+    linear-gradient(180deg, #0b0618 0%, #1a0b3d 18%, #4c1d95 44%, #3b1578 60%, #1a0b3d 80%, #0b0618 100%);
+}
+.landing-title {
+  font-size: clamp(40px, min(10.4vw, 15vh), 136px); font-weight: 600; letter-spacing: -0.055em; line-height: .98; padding-bottom: .06em;
+  text-shadow: 0 10px 50px color-mix(in srgb, #0b0618 55%, transparent);
+}
+.landing-cta {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 36px; padding: 0 16px; border-radius: 999px;
+  background: #14f195; color: #04130d; font-size: 13.5px; font-weight: 600; letter-spacing: -0.01em; white-space: nowrap;
+  box-shadow: inset 0 -1px 0 rgba(0,0,0,.12), 0 1px 2px rgba(0,0,0,.14); transition: box-shadow .25s, transform .2s;
+}
+.landing-cta:hover { box-shadow: inset 0 -1px 0 rgba(0,0,0,.12), 0 10px 26px -10px color-mix(in srgb, #14f195 70%, #000); }
+.landing-cta:active, .landing-cta-2:active { transform: scale(.97); }
+.landing-cta-2 {
+  display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 24px; border-radius: 999px;
+  background: #fff; color: #1a0b3d; font-size: 16px; font-weight: 600; letter-spacing: -0.01em;
+  box-shadow: 0 12px 30px -12px rgba(11,6,24,.7); transition: box-shadow .25s, transform .2s;
+}
+.landing-cta-2:hover { box-shadow: 0 16px 36px -12px rgba(20,241,149,.35); }
+@media (max-width: 359px) { .landing-cta { padding: 0 12px; font-size: 12.5px; } }
+/* The big title is the wordmark, like the header logo: "sol" bold white, "send" regular in the Solana gradient. */
+.landing-sol { font-weight: 700; }
+.landing-send {
+  font-weight: 400; text-shadow: none; padding-right: .04em;
+  background: linear-gradient(90deg, #9945FF, #43B4CA, #14F195); -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.landing-title--side { font-size: clamp(64px, min(8vw, 12.5vh), 124px); }
+.landing-title--split { font-size: clamp(52px, min(6vw, 11vh), 104px); }
+
+/* Split layout (components/SplitFrame.tsx): an app page keeps the landing on the left and slides the app in from the
+   right. Phones and tablets: the app is the whole page (it only fades in, so its fixed tab bar is never displaced). */
+:root { --app-w: clamp(440px, 46vw, 720px); }
+@keyframes pane-in { from { transform: translateX(100%); } to { transform: none; } }
+.app-pane { animation: fade .3s var(--ease-out) both; }
+/* No transition on the landing's right edge: animating it re-laid out the whole landing (and its canvas) on every
+   frame and dropped frames. It snaps to the narrow layout; only the pane moves, with a GPU-only transform. */
+@media (min-width: 1024px) {
+  /* `contain: layout` makes the pane the containing block for its fixed children (toasts, notices), so they sit inside
+     the pane instead of over the landing. The inner element scrolls, so those children don't scroll away. */
+  .app-pane {
+    position: fixed; inset: 0 0 0 auto; z-index: 10; width: var(--app-w); contain: layout;
+    background: var(--paper); border-left: 1px solid var(--line); box-shadow: -30px 0 80px -40px rgb(11 6 24 / .7);
+    animation: pane-in .45s cubic-bezier(.22, 1, .36, 1) both; will-change: transform; backface-visibility: hidden;
+  }
+  /* While the pane slides in, the strip it will cover shows the landing's darkest colour instead of the page paper. */
+  body:has(.app-pane) { background: #0b0618; }
+  .app-pane-scroll { height: 100%; overflow-y: auto; overscroll-behavior: contain; }
+
+  /* Resize handle on the pane's left edge (components/PaneResizer.tsx). A 12 px hit area centred on the border, with a
+     grip that lights up mint on hover, focus and while dragging. It fades in once the pane has slid into place. */
+  .pane-resizer {
+    position: fixed; top: 0; bottom: 0; right: var(--app-w); z-index: 11; width: 12px; margin-right: -6px;
+    cursor: col-resize; touch-action: none; outline: none; animation: fade .25s .4s var(--ease-out) both;
+  }
+  .pane-resizer::after {
+    content: ""; position: absolute; top: 50%; left: 50%; width: 4px; height: 44px; margin: -22px 0 0 -2px; border-radius: 4px;
+    background: color-mix(in srgb, var(--ink-3) 45%, transparent); transition: background-color .15s, height .15s, margin .15s;
+  }
+  .pane-resizer:hover::after, .pane-resizer:focus-visible::after, .pane-resizing .pane-resizer::after { background: var(--mint); height: 72px; margin-top: -36px; }
+  .pane-resizer:focus-visible::after { box-shadow: 0 0 0 3px color-mix(in srgb, var(--mint) 35%, transparent); }
+  .pane-resizing, .pane-resizing * { cursor: col-resize !important; user-select: none; }
+  .pane-resizing .landing-shell { transition: none; }
+}
+/* Pages size themselves to the pane, not the window: `lg:@min-[…]/app-pane:` variants (e.g. a 3-column card grid).
+   lg+ only, where those variants apply: on phones a size container could become the containing block for the fixed tab
+   bar, toasts and sign notice in some engines (older WebKit), pinning them to the page instead of the screen. */
+@media (min-width: 1024px) { .app-pane-scroll { container: app-pane / inline-size; } }
+.pane-resizer { display: none; }
+@media (min-width: 1024px) { .pane-resizer { display: block; } }
