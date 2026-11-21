@@ -276,3 +276,10 @@ dialog.sheet[open] > .sheet-body { animation: sheet-up .32s var(--ease-out) both
 @media (min-width: 1024px) { .app-pane-scroll { container: app-pane / inline-size; } }
 .pane-resizer { display: none; }
 @media (min-width: 1024px) { .pane-resizer { display: block; } }
+
+/* Frens wallet dashboard on the landing (components/FrensWallet.tsx) */
+.landing-title--connected { font-size: clamp(40px, 6vw, 72px); }
+.frens-connect .wallet-adapter-button-trigger {
+  background: #14f195; color: #04130d; border-radius: 999px; height: 40px; font-size: 14px; font-weight: 600;
+}
+.frens-connect .wallet-adapter-button-trigger:hover { background: #3ef0b4 !important; }
